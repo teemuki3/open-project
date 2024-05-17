@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
                 'drone = open_project.drone_function:main',
+                'robot = open_project.robot_function:main',
         ],
     },
 )
