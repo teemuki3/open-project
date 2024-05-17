@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+                'drone = open_project.drone_function:main',
         ],
     },
 )
