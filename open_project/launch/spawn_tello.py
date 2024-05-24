@@ -26,6 +26,6 @@ def generate_launch_description():
              namespace=ns1),
              
         # Liftoff client node to send the takeoff command to the drone
-        Node(package='tello_gazebo', executable='takeoff_client_node.py', output='screen',),
+        Node(package='open_project', executable='takeoff_client_node', output='screen',),
 
     ])

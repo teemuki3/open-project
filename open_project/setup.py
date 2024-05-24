@@ -14,6 +14,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'), glob('launch/*.py')),
         (os.path.join('share', package_name, 'worlds'), glob('worlds/*.world')),
+        (os.path.join('share', package_name, 'src'), glob('src/*.py')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -26,6 +27,7 @@ setup(
         'console_scripts': [
                 'drone = open_project.drone_function:main',
                 'robot = open_project.robot_function:main',
+                'takeoff_client_node = open_project.takeoff_client_node:main',
         ],
     },
 )
