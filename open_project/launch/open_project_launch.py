@@ -36,7 +36,7 @@ def generate_launch_description():
 
     world = os.path.join(
         world_file_dir,
-        'simple.world'
+        'maze.world'
     )
 
     gzserver_cmd = IncludeLaunchDescription(
