@@ -26,9 +26,11 @@ from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
-    world_file_dir = os.path.join(get_package_share_directory('open_project'), 'worlds')
+    world_file_dir   = os.path.join(get_package_share_directory('open_project'), 'worlds')
     open_project_dir = os.path.join(get_package_share_directory('open_project'),'launch')
-    pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
+    merge_map_dir    = os.path.join(get_package_share_directory('merge_map'),'launch')
+    pkg_slam_toolbox = get_package_share_directory('slam_toolbox')
+    pkg_gazebo_ros   = get_package_share_directory('gazebo_ros')
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     x_pose = LaunchConfiguration('x_pose', default='0.0')
@@ -51,6 +53,14 @@ def generate_launch_description():
             os.path.join(pkg_gazebo_ros, 'launch', 'gzclient.launch.py')
         )
     )
+    
+    #Doesnt launch :(
+    slam_toolbox_cmd = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_slam_toolbox, 'launch', 'online_async_launch.py')
+        ),
+        launch_arguments={'use_sim_time': use_sim_time}.items()
+    )
 
     robot_state_publisher_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -72,6 +82,14 @@ def generate_launch_description():
     spawn_tello = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(open_project_dir, 'spawn_tello.py')
+        ),
+        launch_arguments={'use_sim_time': use_sim_time}.items()
+    )
+    
+    # Doesnt launch :(
+    spawn_merge_map = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(merge_map_dir, 'merge_map_launch.py')
         ),
         launch_arguments={'use_sim_time': use_sim_time}.items()
     )
