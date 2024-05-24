@@ -9,7 +9,7 @@ class TakeoffClient(Node):
         super().__init__('takeoff_client')
 
         # Create service client
-        self.client = self.create_client(TelloAction, '/drone1/tello_action')
+        self.client = self.create_client(TelloAction, '/solo/tello_action')
 
         # Wait until the service is available
         while not self.client.wait_for_service(timeout_sec=1.0):

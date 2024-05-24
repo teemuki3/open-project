@@ -8,7 +8,7 @@ import os
 
 def generate_launch_description():
 
-    urdf_path = os.path.join(get_package_share_directory('tello_description'), 'urdf', 'tello_1.urdf')
+    urdf_path = os.path.join(get_package_share_directory('open_project'), 'urdf', 'tello_seeker.urdf')
     ns1 = 'tello_drone'
     
     return LaunchDescription([
