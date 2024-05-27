@@ -27,5 +27,12 @@ def generate_launch_description():
              
         # Liftoff client node to send the takeoff command to the drone
         Node(package='open_project', executable='takeoff_client_node', output='screen',),
-
+        
+        # Spawn tello functionality node.
+        Node(
+            package='open_project',
+            executable='robot',
+            output='screen',
+        ),
+        
     ])

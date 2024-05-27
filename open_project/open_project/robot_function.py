@@ -13,7 +13,7 @@ class MinimalPublisher(Node):
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
         
-        self.subscription = self.create_subscription(OccupancyGrid, '/map_merged', self.map_callback, 10)
+        self.subscription = self.create_subscription(OccupancyGrid, '/merge_map', self.map_callback, 10)
 
     def timer_callback(self):
         msg = String()
@@ -22,8 +22,8 @@ class MinimalPublisher(Node):
         self.get_logger().info('Publishing: "%s"' % msg.data)
         self.i += 1
 
-    def map_callback(self, map_merged):
-        m_msg = map_mergeg
+    def map_callback(self, merge_map):
+        m_msg = merge_map
         pass
 
 def main(args=None):
