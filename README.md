@@ -9,3 +9,7 @@ Before building the project with colcon build, in workspace directory run:
 export GAZEBO_MODEL_PATH=src/open_project/models/:$GAZEBO_MODEL_PATH
 export TURTLEBOT3_MODEL=burger
 ```
+Launch the project with:
+```
+source install/setup.bash; ros2 launch open_project open_project_launch.py
+```
