@@ -54,7 +54,6 @@ def generate_launch_description():
         )
     )
     
-    #Doesnt launch :(
     slam_toolbox_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(pkg_slam_toolbox, 'launch', 'online_async_launch.py')
@@ -86,7 +85,6 @@ def generate_launch_description():
         launch_arguments={'use_sim_time': use_sim_time}.items()
     )
     
-    # Doesnt launch :(
     spawn_merge_map = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(merge_map_dir, 'merge_map_launch.py')
@@ -102,5 +100,7 @@ def generate_launch_description():
     ld.add_action(robot_state_publisher_cmd)
     ld.add_action(spawn_turtlebot_cmd)
     ld.add_action(spawn_tello)
+    ld.add_action(slam_toolbox_cmd)
+    ld.add_action(spawn_merge_map)
 
     return ld

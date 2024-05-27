@@ -18,10 +18,10 @@ def generate_launch_description():
             package='merge_map',
             executable='merge_map',
             output='screen',
-            parameters=[{'use_sim_time': True}]
+            parameters=[{'use_sim_time': True}],
             remappings=[
             ("/map1", "/map"),
-            ("/map2", "/TurtlebotMap"),
+            ("/map2", "/map"),
             ],
         ),
     ])

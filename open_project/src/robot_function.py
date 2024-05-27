@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from nav_msgs.msg import OccupancyGrid
+
 from std_msgs.msg import String
 
 
@@ -22,8 +22,7 @@ class MinimalPublisher(Node):
         self.get_logger().info('Publishing: "%s"' % msg.data)
         self.i += 1
 
-    def map_callback(self, map_merged):
-        m_msg = map_mergeg
+    def map_callback(self):
         pass
 
 def main(args=None):

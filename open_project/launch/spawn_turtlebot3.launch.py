@@ -57,14 +57,20 @@ def generate_launch_description():
         ],
         output='screen',
     )
+    
+    # Spawn turtlebot functionality node.
+    start_robot_function_cmd = Node(
+        package='open_project',
+        executable='robot',
+        output='screen',
+    )
 
     ld = LaunchDescription()
 
     # Declare the launch options
     ld.add_action(declare_x_position_cmd)
     ld.add_action(declare_y_position_cmd)
-
-    # Add any conditioned actions
     ld.add_action(start_gazebo_ros_spawner_cmd)
+    ld.add_action(start_robot_function_cmd)
 
     return ld
