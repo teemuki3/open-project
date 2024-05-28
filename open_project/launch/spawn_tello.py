@@ -21,18 +21,10 @@ def generate_launch_description():
         Node(package='robot_state_publisher', executable='robot_state_publisher', output='screen',
              arguments=[urdf_path]),
              
-        # Joystick controller, generates /namespace/cmd_vel messages for tello control client.
+        # Joystick controller, generates /namespace/cmd_vel messages
         Node(package='tello_driver', executable='tello_joy_main', output='screen',
              namespace=ns1),
-             
-        # Liftoff client node to send the takeoff command to the drone
-        Node(package='open_project', executable='takeoff_client_node', output='screen',),
-        
+
         # Spawn tello functionality node.
-        Node(
-            package='open_project',
-            executable='drone',
-            output='screen',
-        ),
-        
+        Node(package='open_project', executable='drone',output='screen'),
     ])
