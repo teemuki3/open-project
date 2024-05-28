@@ -101,6 +101,6 @@ def generate_launch_description():
     ld.add_action(spawn_turtlebot_cmd)
     ld.add_action(spawn_tello)
     ld.add_action(slam_toolbox_cmd)
-    ld.add_action(spawn_merge_map)
+    #ld.add_action(spawn_merge_map)
 
     return ld

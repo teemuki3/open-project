@@ -71,6 +71,6 @@ def generate_launch_description():
     ld.add_action(declare_x_position_cmd)
     ld.add_action(declare_y_position_cmd)
     ld.add_action(start_gazebo_ros_spawner_cmd)
-    ld.add_action(start_robot_function_cmd)
+    #ld.add_action(start_robot_function_cmd)
 
     return ld

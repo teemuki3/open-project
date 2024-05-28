@@ -31,7 +31,7 @@ def generate_launch_description():
         # Spawn tello functionality node.
         Node(
             package='open_project',
-            executable='robot',
+            executable='drone',
             output='screen',
         ),
         
