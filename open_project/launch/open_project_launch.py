@@ -45,18 +45,20 @@ def generate_launch_description():
         IncludeLaunchDescription(PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'navigation_launch.py')), launch_arguments={'use_sim_time': use_sim_time, 'slam_params_file': get_package_share_directory('open_project')}.items()),
         DeclareLaunchArgument('use_sim_time', default_value='true', description='Use simulation (Gazebo) clock if true'),
 
-        # Robot 1
-        Node(package='open_project', executable='drone', namespace='robot1', output='screen', parameters=[{'use_sim_time': use_sim_time}]),
-        Node(package='robot_state_publisher', executable='robot_state_publisher', namespace='robot1', output='screen', parameters=[{'use_sim_time': use_sim_time}], arguments=[tello_urdf]),
+        # Drone
+        Node(package='open_project', executable='drone', namespace='drone', output='screen', parameters=[{'use_sim_time': use_sim_time}]),
+        Node(package='robot_state_publisher', executable='robot_state_publisher', namespace='drone', output='screen', parameters=[{'use_sim_time': use_sim_time}], arguments=[tello_urdf]),
         Node(package='gazebo_ros', executable='spawn_entity.py', arguments=['-entity', 'tello', '-file', tello_urdf, '-x', '1.0', '-y', '0.0', '-z', '1.0'], output='screen'),
 
-        # Robot 2
-        #Node(package='open_project', executable='robot', namespace='robot2', output='screen', parameters=[{'use_sim_time': use_sim_time}]), # Tässä on jotain helloworld paskaa vaan
-        Node(package='robot_state_publisher', executable='robot_state_publisher', namespace='robot2', output='screen', parameters=[{'use_sim_time': use_sim_time}], arguments=[turtle_urdf]),
+        # Turtlebot
+        Node(package='open_project', executable='robot', namespace='turtlebot', output='screen', parameters=[{'use_sim_time': use_sim_time}]),
+        Node(package='robot_state_publisher', executable='robot_state_publisher', namespace='turtlebot', output='screen', parameters=[{'use_sim_time': use_sim_time}], arguments=[turtle_urdf]),
         Node(package='gazebo_ros', executable='spawn_entity.py', arguments=['-entity', TURTLEBOT3_MODEL, '-file', turtle_sdf, '-x', '0.0', '-y', '0.0', '-z', '0.0'], output='screen'),
 
+        # PointCloud to LaserScan
         Node(package='pointcloud_to_laserscan', executable='pointcloud_to_laserscan_node', output='screen', parameters=[os.path.join(get_package_share_directory('open_project'), 'pointcloud_to_laserscan_params.yaml')], remappings=[('cloud_in', '/depth_camera/points'), ('scan', 'ultrascan')]),
-        Node(package='slam_toolbox', executable='sync_slam_toolbox_node', output='screen', parameters=[os.path.join(get_package_share_directory('open_project'), 'slam_params.yaml')])
+        # SLAM Toolbox
+        Node(package='slam_toolbox', executable='sync_slam_toolbox_node', output='screen', parameters=[os.path.join(get_package_share_directory('open_project'), 'slam_params.yaml')]),
 
     ])
     return ld

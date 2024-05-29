@@ -1,4 +1,7 @@
-import rclpy, math, transformations, time
+import rclpy
+import math
+import transformations
+import time
 from rclpy.node import Node
 from geometry_msgs.msg import Pose, PoseStamped, Twist, TransformStamped
 from tello_msgs.srv import TelloAction
@@ -19,7 +22,7 @@ class Drone(Node):
         self.odom_broadcaster = TransformBroadcaster(self)
 
         # Timer to publish odometry
-        self.timer = self.create_timer(0.5, self.timer_callback)
+        self.timer = self.create_timer(0.1, self.timer_callback)
 
         # Create service client
         self.client = self.create_client(TelloAction, '/solo/tello_action')
@@ -46,7 +49,7 @@ class Drone(Node):
         self.vth = 0.0  # Simulated angular velocity around z-axis
 
         self.send_takeoff_request()
-        self.change_altitude(14)
+        self.move_pattern()
 
     def timer_callback(self):
         current_time = self.get_clock().now().to_msg()
@@ -133,12 +136,19 @@ class Drone(Node):
     def move_forward(self, distance=1):
         request = TelloAction.Request()
         request.cmd = 'rc 0.4 0 0 0'
-        m_time = distance / 4
+        m_time = distance / 2
         self.client.call_async(request)
         time.sleep(m_time)
         request.cmd = 'rc 0 0 0 0'
         self.client.call_async(request)
         time.sleep(0.8)
+
+    def move_pattern(self):
+        # Move in a simple pattern (e.g., a square or back-and-forth) to cover the maze
+        self.change_altitude(14)  # Rise to 2 meters
+        for _ in range(4):
+            self.move_forward(2)
+            self.turn(90)
 
     def change_altitude(self, change_value):
         if change_value != 0:
