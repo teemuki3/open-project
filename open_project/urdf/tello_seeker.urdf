@@ -18,7 +18,7 @@
     <!-- TODO add Gazebo color information -->
 
     <!-- Base link -->
-    <link name="base_link">
+    <link name="robot1/base_link">
         <visual>
             <origin xyz="0 0 0.01"/>
             <geometry>
@@ -96,7 +96,7 @@
     <!-- Fixed joint -->
     <joint name="camera_joint" type="fixed">
         <origin xyz="0.035 0 0" rpy="0 0 0"/>  <!-- TODO fix origin -->
-        <parent link="base_link"/>
+        <parent link="robot1/base_link"/>
         <child link="camera_link"/>
     </joint>
 
@@ -105,7 +105,7 @@
         <plugin name="TelloPlugin" filename="libTelloPlugin.so">
             <namespace>solo</namespace>
             <parameter name="use_sim_time" type="bool">1</parameter>
-            <link_name>base_link</link_name>
+            <link_name>robot1/base_link</link_name>
             <center_of_mass>0 0 0</center_of_mass>
         </plugin>
     </gazebo>
@@ -173,12 +173,12 @@
 
     <!-- Joint connecting base link and depth camera link -->
     <joint name="depth_camera_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="robot1/base_link"/>
         <child link="depth_camera_link"/>
         <origin xyz="0 0 -0.1" rpy="0 1.5708 0"/>
     </joint>
 
-    <!-- LiDAR sensor -->
+    <!-- Depth camera sensor -->
     <gazebo reference="depth_camera_link">
         <sensor type="depth" name="depth_camera">
             <always_on>true</always_on>
