@@ -1,7 +1,9 @@
 import rclpy, math, transformations, time
 from rclpy.node import Node
-from geometry_msgs.msg import Pose, PoseStamped, Twist
-from tello_msgs.srv import TelloAction  # Import the service message
+from geometry_msgs.msg import Pose, PoseStamped, Twist, TransformStamped
+from tello_msgs.srv import TelloAction
+from tf2_ros import TransformBroadcaster
+from nav_msgs.msg import Odometry
 
 
 class Drone(Node):
@@ -9,6 +11,15 @@ class Drone(Node):
     def __init__(self):
         super().__init__('drone')
         self.create_subscription(PoseStamped, '/goal_pose', self.goal_pose_callback, 10)
+
+        # Odometry publisher
+        self.odom_publisher_ = self.create_publisher(Odometry, 'odom', 10)
+
+        # Transform broadcaster
+        self.odom_broadcaster = TransformBroadcaster(self)
+
+        # Timer to publish odometry
+        self.timer = self.create_timer(0.5, self.timer_callback)
 
         # Create service client
         self.client = self.create_client(TelloAction, '/solo/tello_action')
@@ -22,14 +33,56 @@ class Drone(Node):
         self.current_pose.position.x = float(1)
         self.current_pose.position.y = float(0)
         self.current_pose.position.z = float(1)
-        q = transformations.quaternion_from_euler(0, 0, float(1.57079632679))
+        q = transformations.quaternion_from_euler(0, 0, 0)
         self.current_pose.orientation.w = q[0]
         self.current_pose.orientation.x = q[1]
         self.current_pose.orientation.y = q[2]
         self.current_pose.orientation.z = q[3]
 
+        # Drone state
+        self.vx = 0.0  # Simulated linear velocity in x
+        self.vy = 0.0  # Simulated linear velocity in y
+        self.vz = 0.0  # Simulated linear velocity in z
+        self.vth = 0.0  # Simulated angular velocity around z-axis
+
         self.send_takeoff_request()
         self.change_altitude(14)
+
+    def timer_callback(self):
+        current_time = self.get_clock().now().to_msg()
+
+        # Create transform from odom to base_link
+        odom_trans = TransformStamped()
+        odom_trans.header.stamp = current_time
+        odom_trans.header.frame_id = '/odom'
+        odom_trans.child_frame_id = f'{self.get_namespace()}/base_link'
+
+        odom_trans.transform.translation.x = self.current_pose.position.x
+        odom_trans.transform.translation.y = self.current_pose.position.y
+        odom_trans.transform.translation.z = self.current_pose.position.z
+        odom_quat = transformations.quaternion_from_euler(0, 0, self.current_pose.orientation.z)
+        odom_trans.transform.rotation.x = odom_quat[0]
+        odom_trans.transform.rotation.y = odom_quat[1]
+        odom_trans.transform.rotation.z = odom_quat[2]
+        odom_trans.transform.rotation.w = odom_quat[3]
+
+        # Publish the transform
+        self.odom_broadcaster.sendTransform(odom_trans)
+
+        # Create and publish the odometry message
+        odom = Odometry()
+        odom.header.stamp = current_time
+        odom.header.frame_id = '/odom'
+
+        odom.pose.pose = self.current_pose
+
+        odom.child_frame_id = f'{self.get_namespace()}/base_link'
+        odom.twist.twist.linear.x = self.vx
+        odom.twist.twist.linear.y = self.vy
+        odom.twist.twist.linear.z = self.vz
+        odom.twist.twist.angular.z = self.vth
+
+        self.odom_publisher_.publish(odom)
 
     def goal_pose_callback(self, msg):
         self.get_logger().info(f'Received goal pose: {msg.pose}')

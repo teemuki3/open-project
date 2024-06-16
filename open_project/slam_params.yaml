@@ -1,0 +1,22 @@
+slam_toolbox:
+  ros__parameters:
+    use_sim_time: true
+    slam_toolbox:
+      mode: "mapping"
+      map_file_name: ""
+      resolution: 0.05
+      publish_period_sec: 1.0
+      max_laser_range: 10.0
+      minimum_time_interval: 0.0
+      transform_publish_period: 0.05
+      map_update_interval: 5.0
+      use_scan_matching: true
+      use_scan_barycenter: false
+      map_topic: "map"
+      scan_topic: "points2"
+      robot_frame: "base_link"
+      map_frame: "map"
+      odom_frame: "odom"
+      provide_odom_frame: true
+      use_odometry: true
+      point_cloud_topic: "/depth_camera/points"
